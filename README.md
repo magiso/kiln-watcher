@@ -8,6 +8,7 @@ Shows whether a top-loading kiln is closed, open and full, or open and empty. An
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | File layout, dependency rules, data flow, display states, config |
 | [docs/TESTING.md](docs/TESTING.md) | Testing principles, layers and commands |
 | [docs/design/README.md](docs/design/README.md) | Pastel Riso design: colours, type, copy, icons |
+| [firmware/README.md](firmware/README.md) | Sensor firmware and its contract with the API |
 
 ## Status
 
@@ -17,7 +18,7 @@ Shows whether a top-loading kiln is closed, open and full, or open and empty. An
 | 2. Route handlers and shared types, tested with `curl` | Done |
 | 3. Status page (four display states) | Done |
 | 4. Calibrate thresholds after mounting | Not started; thresholds are placeholders |
-| 5. Connect the ESP32 | Separate session |
+| 5. Connect the ESP32 | `firmware/` created with the device contract; hardware plan next |
 | Later | History endpoint and list; reading tuning and unreliable-reading handling |
 
 ## How it works
