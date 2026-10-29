@@ -2,27 +2,33 @@
 
 Shows whether a top-loading kiln is closed, open and full, or open and empty. An ESP32 with an HC-SR04 ultrasonic sensor posts distance readings to a Next.js app on Vercel, which stores them in Upstash Redis and serves a status page.
 
-The full plan (architecture, API contract, states, build order) is in [docs/PLAN.md](docs/PLAN.md). The visual design (Pastel Riso: colours, type, copy, icons) is in [docs/design/README.md](docs/design/README.md).
+| Doc | Covers |
+| --- | --- |
+| [docs/PLAN.md](docs/PLAN.md) | Original plan: API contract, storage, build order |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | File layout, dependency rules, data flow, display states, config |
+| [docs/TESTING.md](docs/TESTING.md) | Testing principles, layers and commands |
+| [docs/design/README.md](docs/design/README.md) | Pastel Riso design: colours, type, copy, icons |
 
 ## Status
 
 | Build step | State |
 | --- | --- |
-| 1. Next.js app, Vercel project, Upstash integration | Repo scaffolded; Vercel and Upstash setup still to do (see below) |
+| 1. Next.js app, Vercel project, Upstash integration | Done |
 | 2. Route handlers and shared types, tested with `curl` | Types written; routes are stubs (`/api/health` works, the others return `501`) |
-| 3. Status card and history list | Placeholder page; design reference, colours and icons saved |
+| 3. Status page (four display states) | Placeholder page; design reference, colours and icons saved |
 | 4. Calibrate thresholds after mounting | Not started; thresholds are placeholders |
 | 5. Connect the ESP32 | Separate session |
+| Later | History endpoint and list; reading tuning and unreliable-reading handling |
 
 ## How it works
 
 ```
 ESP32 + HC-SR04 --POST /api/readings--> Next.js API (Vercel) <--> Upstash Redis
                                               ^
-                          Browser --GET /api/status, /api/history--+
+                          Browser --GET /api/status-------------+
 ```
 
-The device wakes every 3–6 hours (or on a button press) and posts a median distance reading. The server timestamps it, maps it to a kiln state, and stores it in Redis as `kiln:latest`. It also pushes it onto `kiln:history`, which is capped at 500 entries. The page shows the latest state and how old it is. Only the API talks to Redis, and nothing calls the device.
+The device wakes every 3–6 hours (or on a button press) and posts a median distance reading. The server timestamps it, maps it to a kiln state, stores it as `kiln:latest` and pushes it onto `kiln:history`, which is capped at 500 entries. The page shows the latest state and how old it is, or OFFLINE when it is stale. Only the API talks to Redis, and nothing calls the device.
 
 ### Kiln states
 
@@ -33,9 +39,8 @@ The sensor looks down into the kiln, so each state is a band of distance. `T_LID
 | `CLOSED` | The lid | `< T_LID` |
 | `OPEN_FULL` | The top of the ware | `T_LID` to `T_EMPTY` |
 | `OPEN_EMPTY` | The kiln floor | `≥ T_EMPTY` |
-| `UNKNOWN` | Too few valid samples or too much spread | — |
 
-A reading older than about 2× its `intervalSec` is flagged `stale` ("Sensor offline").
+If no reading has ever arrived, or the latest is more than 24 hours old, the page shows OFFLINE. Threshold tuning and handling of unreliable readings come later; for now every reading counts. Display states and copy are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#display-states).
 
 ### API
 
@@ -43,7 +48,7 @@ A reading older than about 2× its `intervalSec` is flagged `stale` ("Sensor off
 | --- | --- | --- |
 | `POST /api/readings` | Device | Store a reading. Needs `Authorization: Bearer <DEVICE_KEY>`. Returns `204`, `401` for a bad key, `400` for a bad body |
 | `GET /api/status` | Frontend | Latest reading, interpreted |
-| `GET /api/history?limit=N` | Frontend | Recent readings, newest first (default 20, max 500) |
+| `GET /api/history?limit=N` | Frontend | Deferred. Recent readings, newest first (default 20, max 500) |
 | `GET /api/health` | Monitoring | Liveness check |
 
 Example device request:
@@ -55,26 +60,11 @@ curl -X POST http://localhost:3000/api/readings \
   -d '{"deviceId":"kiln-1","distanceMm":482,"spreadMm":6,"validSamples":14,"intervalSec":14400,"trigger":"timer"}'
 ```
 
-Request and response shapes are defined in [lib/types.ts](lib/types.ts).
+Request and response shapes are defined in [lib/types.ts](lib/types.ts), which moves to `lib/domain/types.ts` in step 2.
 
 ## Layout
 
-```
-app/
-  page.tsx                 status card + history list
-  api/readings/route.ts    POST from device
-  api/status/route.ts      GET latest status
-  api/history/route.ts     GET recent readings
-  api/health/route.ts      liveness check
-lib/
-  types.ts                 shared Reading / Status / KilnState types
-  state.ts                 distance → state → message mapping
-  redis.ts                 Upstash client (created on first use)
-docs/
-  PLAN.md                  project plan
-  design/                  final design reference + renders
-public/icons/              state icon SVGs
-```
+`lib/domain` holds pure logic, `lib/server` holds I/O and wiring, and `app/` is a thin adapter layer. The full layout and import rules are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Local development
 
@@ -82,7 +72,8 @@ public/icons/              state icon SVGs
 npm install
 cp .env.example .env.local   # or `vercel env pull .env.local` once linked
 npm run dev                  # http://localhost:3000
-npm test                     # vitest
+npm test                     # unit + handler tests, offline
+npm run test:coverage        # same, with the 90% gate
 npm run lint
 npm run build
 ```
@@ -112,7 +103,6 @@ All are server-only. Don't prefix them with `NEXT_PUBLIC_`.
 ## Open items
 
 - [ ] Calibrate `T_LID` and `T_EMPTY` from real readings after mounting. The placeholders (300 / 700 mm) assume the plan's example. A sensor mounted about 50 cm above a closed lid would need a higher `T_LID`.
-- [ ] Set the reliability cut-offs for `validSamples` and `spreadMm`.
+- [ ] Later: decide how to handle unreliable readings (`validSamples`, `spreadMm`).
 - [ ] Confirm the open lid stays out of the sensor's beam.
-- [ ] Settle the final wording of the state messages.
 - [ ] Hot-kiln readings run a few cm short, so leave margin between thresholds.

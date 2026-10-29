@@ -2,6 +2,8 @@
 
 Oct 28, 2026 · Miso · source: [Claude Doc](https://claude.ai/artifact/GAEp17qGUhpAcWm39gBmhq)
 
+> **Decisions since this plan (2026-10-29):** the history endpoint and list are deferred (readings are still stored), and reading tuning, unreliable-reading handling and the "Unclear reading" display come later. OFFLINE shows when no reading has ever arrived or the latest is more than 24 hours old. The status messages use the design copy (HOT. / FULL. / EMPTY. / OFFLINE.). The current structure and testing approach are in [ARCHITECTURE.md](ARCHITECTURE.md) and [TESTING.md](TESTING.md).
+
 ## Architecture
 
 The device pushes readings and the site pulls the latest one; the site never calls the Arduino directly. The ESP32 wakes every 3–6 hours (or on a button press) and POSTs a median reading to the API. The API stores it in Upstash Redis. Visitors load a Next.js page that fetches the latest status from the same app and shows it with its age.
