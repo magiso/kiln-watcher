@@ -14,7 +14,7 @@ Shows whether a top-loading kiln is closed, open and full, or open and empty. An
 | Build step | State |
 | --- | --- |
 | 1. Next.js app, Vercel project, Upstash integration | Done |
-| 2. Route handlers and shared types, tested with `curl` | Types written; routes are stubs (`/api/health` works, the others return `501`) |
+| 2. Route handlers and shared types, tested with `curl` | Done |
 | 3. Status page (four display states) | Placeholder page; design reference, colours and icons saved |
 | 4. Calibrate thresholds after mounting | Not started; thresholds are placeholders |
 | 5. Connect the ESP32 | Separate session |
@@ -46,8 +46,8 @@ If no reading has ever arrived, or the latest is more than 24 hours old, the pag
 
 | Endpoint | Caller | Purpose |
 | --- | --- | --- |
-| `POST /api/readings` | Device | Store a reading. Needs `Authorization: Bearer <DEVICE_KEY>`. Returns `204`, `401` for a bad key, `400` for a bad body |
-| `GET /api/status` | Frontend | Latest reading, interpreted |
+| `POST /api/readings` | Device | Store a reading. Needs `Authorization: Bearer <DEVICE_KEY>`. Returns `204`, `401` for a bad key, `400` for a bad body, `503` if storage is down |
+| `GET /api/status` | Frontend | Display state, design copy and the latest reading's details. Always `200` (OFFLINE when there is no recent reading); `503` if storage is down |
 | `GET /api/history?limit=N` | Frontend | Deferred. Recent readings, newest first (default 20, max 500) |
 | `GET /api/health` | Monitoring | Liveness check |
 
@@ -74,6 +74,8 @@ cp .env.example .env.local   # or `vercel env pull .env.local` once linked
 npm run dev                  # http://localhost:3000
 npm test                     # unit + handler tests, offline
 npm run test:coverage        # same, with the 90% gate
+npm run test:integration     # store contract against real Upstash (needs .env.local)
+scripts/smoke.sh http://localhost:3000 --write   # end-to-end checks against a running server
 npm run lint
 npm run build
 ```

@@ -1,4 +1,6 @@
-// POST from the device. Implemented in build step 2.
-export async function POST() {
-  return new Response(null, { status: 501 });
+import { defaultDeps } from "@/lib/server/deps";
+import { postReading } from "@/lib/server/handlers";
+
+export function POST(request: Request) {
+  return postReading(request, defaultDeps());
 }

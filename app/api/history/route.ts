@@ -1,6 +1,6 @@
 import { connection } from "next/server";
 
-// GET for the frontend. Implemented in build step 2.
+// Deferred: readings are already stored in history; the endpoint comes later (docs/ARCHITECTURE.md).
 export async function GET() {
   await connection();
   return new Response(null, { status: 501 });
