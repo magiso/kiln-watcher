@@ -1,6 +1,6 @@
 # kiln-watcher
 
-Shows whether a top-loading kiln is closed, open and full, or open and empty. An Arduino Uno with an HC-SR04 ultrasonic sensor measures the kiln, and an ESP-01 (ESP8266) posts the readings to a Next.js app on Vercel, which stores them in Upstash Redis and serves a status page.
+Shows whether a top-loading kiln is closed, open and full, or open and empty. An ESP32 with an HC-SR04 ultrasonic sensor posts distance readings to a Next.js app on Vercel, which stores them in Upstash Redis and serves a status page.
 
 | Doc | Covers |
 | --- | --- |
@@ -18,13 +18,13 @@ Shows whether a top-loading kiln is closed, open and full, or open and empty. An
 | 2. Route handlers and shared types, tested with `curl` | Done |
 | 3. Status page (four display states) | Done |
 | 4. Calibrate thresholds after mounting | Not started; thresholds are placeholders |
-| 5. Sensor firmware (Uno + ESP-01) | Planned in [firmware/PLAN.md](firmware/PLAN.md) |
+| 5. Sensor firmware (ESP32) | Planned in [firmware/PLAN.md](firmware/PLAN.md) |
 | Later | History endpoint and list; reading tuning and unreliable-reading handling |
 
 ## How it works
 
 ```
-Uno + HC-SR04 → ESP-01 --POST /api/readings--> Next.js API (Vercel) <--> Upstash Redis
+ESP32 + HC-SR04 --POST /api/readings--> Next.js API (Vercel) <--> Upstash Redis
                                               ^
                           Browser --GET /api/status-------------+
 ```

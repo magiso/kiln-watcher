@@ -47,7 +47,7 @@ lib/
     handlers.ts              postReading / getStatus / loadStatus (request, deps)
     deps.ts                  production wiring: config, Redis store, real clock
 docs/                        plan, architecture, testing, design reference
-firmware/                    Uno + ESP-01 sensor code, PlatformIO (not deployed to Vercel)
+firmware/                    ESP32 sensor code, PlatformIO (not deployed to Vercel)
 public/icons/                design SVG exports (reference; the app inlines them)
 scripts/
   smoke.sh                   curl checks against a running server
