@@ -9,6 +9,7 @@
   --color-empty: #b9e8c4; /* OPEN_EMPTY: mint */
   --color-butter: #ffe9a3; /* accent */
   --color-lavender: #c9b8f5; /* accent */
+  --color-offline: #d9ccf7; /* sensor disconnected (stale) */
   --color-button: #ffffff; /* button fill */
 }
 

@@ -8,12 +8,17 @@ This is the final design for the status page. It has one full-colour card per ki
 
 The desktop boards for the other states are [desktop-closed.png](screens/desktop-closed.png) and [desktop-empty.png](screens/desktop-empty.png).
 
+| Sensor disconnected (mobile) | Sensor disconnected (desktop) |
+| --- | --- |
+| ![Mobile disconnected](screens/mobile-disconnected.png) | ![Desktop disconnected](screens/desktop-disconnected.png) |
+
 ## Files
 
 | Path | What |
 | --- | --- |
 | `docs/design/Main.dc.html` | Mobile board: three 390 × 780 phone screens |
 | `docs/design/Desktop{Closed,Full,Empty}.dc.html` | Desktop board for each state (1280 × 800) |
+| `docs/design/DisconnectedMobile.dc.html`, `docs/design/DesktopDisconnected.dc.html` | Sensor-disconnected screen, mobile and desktop |
 | `docs/design/canvas.json` | Canvas layout metadata |
 | `docs/design/screens/*.png` | Renders of the boards above |
 | `public/icons/*.svg` | Icon assets, served at `/icons/...` |
@@ -33,9 +38,10 @@ These are also defined as Tailwind theme colours in `app/globals.css`, for examp
 | `empty` | `#B9E8C4` | Mint: the `OPEN_EMPTY` card |
 | `butter` | `#FFE9A3` | Accent: icon fills and circles |
 | `lavender` | `#C9B8F5` | Accent: icon circles |
+| `offline` | `#D9CCF7` | Light lavender: the sensor-disconnected card |
 | `button` | `#FFFFFF` | Button fill |
 
-The design has no colour for `UNKNOWN` or a stale reading yet.
+A stale reading uses the `offline` colour. `UNKNOWN` ("Unclear reading") has no design yet.
 
 ## Type
 
@@ -65,15 +71,19 @@ Both fonts are free on Google Fonts. Load them with `next/font/google`.
 | `CLOSED` | HOT. | The kiln is closed and firing. Look, don't touch. |
 | `OPEN_FULL` | FULL. | The kiln is open and full. It'll be unloaded soon! |
 | `OPEN_EMPTY` | EMPTY. | All clear and ready for the next load. Shelve your pieces! |
+| Sensor disconnected (`stale`) | OFFLINE. | Engineering troubleshooting required! |
+
+The disconnected screen adds a small "SENSOR DISCONNECTED" label above the word, and it has no REFRESH button. On mobile, "Last reading [TIME]" replaces the "Checked …" line at the bottom. On desktop it sits alone at the right of the header row.
 
 ## Icons
 
-All nine SVGs share a 334 × 260 viewBox, so the layers line up when stacked.
+All twelve SVGs share a 334 × 260 viewBox, so the layers line up when stacked.
 
 | State | Combined | Icon only | Circles only |
 | --- | --- | --- | --- |
 | `CLOSED` | `kiln-closed.svg` | `kiln-closed-icon.svg` | `kiln-closed-circles.svg` |
 | `OPEN_FULL` | `kiln-full.svg` | `kiln-full-icon.svg` | `kiln-full-circles.svg` |
 | `OPEN_EMPTY` | `kiln-empty.svg` | `kiln-empty-icon.svg` | `kiln-empty-circles.svg` |
+| Sensor disconnected | `kiln-disconnected.svg` | `kiln-disconnected-icon.svg` | `kiln-disconnected-circles.svg` |
 
 The circles use `mix-blend-mode: multiply`. They only look right on their own state colour and look lighter on white. Inline the SVG markup inside the coloured card. An SVG loaded through `<img>` or `next/image` is isolated, so its circles only blend with each other and not with the card behind them.
