@@ -68,4 +68,4 @@ Adding to this list needs a reason in the table. Don't add a file to it just to 
 ## Out of scope for now
 
 - **Browser end-to-end tests** (Playwright). This is a one-page app with one interaction, so smoke checks plus component tests cover it. Revisit if the page grows.
-- **Device firmware tests.** These belong to the ESP32 session.
+- **Device firmware tests.** These are covered in [firmware/PLAN.md](../firmware/PLAN.md#testing): native unit tests for the pure libraries, plus bench and mounted checklists.

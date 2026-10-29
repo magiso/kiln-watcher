@@ -1,8 +1,8 @@
 # Sensor firmware
 
-Code for the device that measures the kiln: an ESP32 with an HC-SR04 ultrasonic sensor, mounted about 50 cm from the top-loading kiln. It wakes every 3–6 hours, or when its button is pressed, takes a median distance reading and POSTs it to the web app.
+Code for the device that measures the kiln. An Arduino Uno reads an HC-SR04 ultrasonic sensor mounted on the wall about 50 cm above the top-loading kiln, pointing down. An ESP-01 (ESP8266) sends the readings over Wi-Fi. A reading goes out every 4 hours, and whenever the button is pressed.
 
-The firmware is planned but not written yet. The hardware inventory, toolchain and file layout are decided in the hardware planning session.
+The hardware, wiring, software design and build order are in [PLAN.md](PLAN.md). The firmware isn't written yet.
 
 ## Contract with the web app
 
