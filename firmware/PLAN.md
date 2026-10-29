@@ -7,7 +7,7 @@ The Arduino Uno measures and decides when to report. The ESP-01 is a small Wi-Fi
 | Part | Have | Role |
 | --- | --- | --- |
 | Arduino Uno | Yes | Sensor, button, LEDs, timing |
-| ESP8266 ESP-01 / ESP-01S | Yes | Wi-Fi + HTTPS to the API |
+| ESP8266 ESP-01 (original, not the S) | Yes | Wi-Fi + HTTPS to the API. 3.3 V only: never connect it to 5 V. The original has no built-in pull-ups, so the external ones in the wiring table are required |
 | HC-SR04 | Yes | Distance, about 50 cm above the kiln, pointing down |
 | Push button | Yes | Take and send a reading now |
 | 2 LEDs + 220 Ω resistors | Yes | Green = last send OK, red = problem |
@@ -147,7 +147,7 @@ Every branch of the pure libraries should be covered. The 90% gate is enforced o
 ## Open questions
 
 - [ ] Inside depth of the kiln, and the usual height of a full load (for threshold placeholders)
-- [ ] Is it an ESP-01 or an ESP-01S? Both work; the S has the pull-ups built in
+- [ ] Flash size of the ESP-01: a blue board usually has 512 KB, a black one 1 MB. PlatformIO uses `board = esp01` (512 KB) or `esp01_1m`. The HTTPS firmware should fit in 512 KB but leaves no room for over-the-air updates
 - [ ] Wall adapter voltage (barrel 7–12 V, or 5 V USB)
 - [ ] Wi-Fi at the kiln: plain WPA2, or a network with a login page (a login page needs a different approach)
 - [ ] Buy the ESP-01 breadboard adapter with regulator (and ideally the ESP-01 USB programmer) before step 3
