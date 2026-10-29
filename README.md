@@ -2,7 +2,7 @@
 
 Shows whether a top-loading kiln is closed, open and full, or open and empty. An ESP32 with an HC-SR04 ultrasonic sensor posts distance readings to a Next.js app on Vercel, which stores them in Upstash Redis and serves a status page.
 
-The full plan (architecture, API contract, states, build order) is in [docs/PLAN.md](docs/PLAN.md).
+The full plan (architecture, API contract, states, build order) is in [docs/PLAN.md](docs/PLAN.md). The visual design (Pastel Riso: colours, type, copy, icons) is in [docs/design/README.md](docs/design/README.md).
 
 ## Status
 
@@ -10,7 +10,7 @@ The full plan (architecture, API contract, states, build order) is in [docs/PLAN
 | --- | --- |
 | 1. Next.js app, Vercel project, Upstash integration | Repo scaffolded; Vercel and Upstash setup still to do (see below) |
 | 2. Route handlers and shared types, tested with `curl` | Types written; routes are stubs (`/api/health` works, the others return `501`) |
-| 3. Status card and history list | Placeholder page |
+| 3. Status card and history list | Placeholder page; design reference, colours and icons saved |
 | 4. Calibrate thresholds after mounting | Not started; thresholds are placeholders |
 | 5. Connect the ESP32 | Separate session |
 
@@ -72,6 +72,8 @@ lib/
   redis.ts                 Upstash client (created on first use)
 docs/
   PLAN.md                  project plan
+  design/                  final design reference + renders
+public/icons/              state icon SVGs
 ```
 
 ## Local development

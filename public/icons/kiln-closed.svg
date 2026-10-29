@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="334" height="260" viewBox="0 0 334 260" role="img" aria-label="Kiln closed and firing">
+<circle cx="135" cy="128" r="104" fill="#FFE9A3" style="mix-blend-mode: multiply"/>
+<circle cx="225" cy="118" r="78" fill="#C9B8F5" style="mix-blend-mode: multiply"/>
+<path d="M167 30 C195 80 230 105 230 160 C230 205 200 236 167 236 C134 236 104 205 104 160 C104 122 128 104 140 72 C152 100 162 108 167 30 Z" fill="#FFE9A3"/>
+<path d="M173 24 C201 74 236 99 236 154 C236 199 206 230 173 230 C140 230 110 199 110 154 C110 116 134 98 146 66 C158 94 168 102 173 24 Z" fill="none" stroke="#2F2A4A" stroke-width="5" stroke-linejoin="round"/>
+</svg>

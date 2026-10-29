@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kiln Full — Desktop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&amp;family=DM+Sans:wght@500;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2F2A4A}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="min-height: 800px; box-sizing: border-box; padding: 40px 24px 56px; background: #F7F4F2; font-family: 'DM Sans', system-ui, sans-serif; color: #2F2A4A">
+<div style="max-width: 1160px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px">
+<header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px">
+<span style="font-family: 'Anton', sans-serif; font-size: 30px; letter-spacing: 0.04em">PART TIME KILN WATCHER</span>
+<div style="display: flex; align-items: center; gap: 16px">
+<span style="font-size: 15px; font-weight: 700">Checked just now</span>
+<button style="min-height: 48px; padding: 0 22px; border: 3px solid #2F2A4A; border-radius: 12px; background: #FFFFFF; color: #2F2A4A; font-family: 'Anton', sans-serif; font-size: 18px; letter-spacing: 0.06em; box-shadow: 5px 5px 0 #2F2A4A; cursor: pointer">REFRESH</button>
+</div>
+</header>
+<main style="border: 4px solid #2F2A4A; border-radius: 36px; background: #A8DDF0; box-shadow: 14px 14px 0 #2F2A4A; padding: 48px; display: flex; flex-wrap: wrap; align-items: center; gap: 48px">
+<div style="flex: 1 1 340px; min-width: 0; display: flex; justify-content: center">
+<svg viewBox="0 0 334 260" role="img" aria-label="Riso-style pots: the kiln is full" style="width: 100%; max-width: 480px; height: auto">
+<circle cx="120" cy="120" r="96" fill="#FFB5C8" style="mix-blend-mode: multiply"></circle>
+<circle cx="226" cy="140" r="84" fill="#FFE9A3" style="mix-blend-mode: multiply"></circle>
+<g transform="translate(27,-14) scale(1.4)" fill="#FFB5C8">
+<path d="M38 156 C26 128 42 108 50 98 L50 78 L66 78 L66 98 C74 108 90 128 78 156 Z"></path>
+<path d="M86 124 L148 124 C148 146 134 156 117 156 C100 156 86 146 86 124 Z"></path>
+<rect x="138" y="104" width="34" height="52" rx="6"></rect>
+</g>
+<g transform="translate(32,-19) scale(1.4)" fill="none" stroke="#2F2A4A" stroke-width="3.5" stroke-linejoin="round">
+<path d="M38 156 C26 128 42 108 50 98 L50 78 L66 78 L66 98 C74 108 90 128 78 156 Z"></path>
+<path d="M86 124 L148 124 C148 146 134 156 117 156 C100 156 86 146 86 124 Z"></path>
+<rect x="138" y="104" width="34" height="52" rx="6"></rect>
+<path d="M172 116 C186 116 186 142 172 142"></path>
+<path d="M22 162 L186 162"></path>
+</g>
+</svg>
+</div>
+<div style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+<span style="font-size: 14px; font-weight: 700; letter-spacing: 0.14em">KILN STATUS</span>
+<h1 style="margin: 0; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(88px, 11vw, 168px); line-height: 0.9">FULL.</h1>
+<p style="margin: 0; font-size: 26px; font-weight: 700; line-height: 1.3; max-width: 30ch">The kiln is open and full. It'll be unloaded soon!</p>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

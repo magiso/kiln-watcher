@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kiln Watcher Mobile</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&amp;family=DM+Sans:wght@500;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2F2A4A}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 1366px; height: 908px; box-sizing: border-box; padding: 60px 64px 68px; display: flex; flex-direction: row; gap: 64px; background: #F7F4F2; font-family: 'DM Sans', system-ui, sans-serif; color: #2F2A4A">
+
+<div style="width: 390px; height: 780px; box-sizing: border-box; border: 4px solid #2F2A4A; border-radius: 28px; background: #FFB5C8; padding: 26px; display: flex; flex-direction: column; gap: 16px; box-shadow: 10px 10px 0 #2F2A4A">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<span style="font-family: 'Anton', sans-serif; font-size: 20px; letter-spacing: 0.04em">PART TIME KILN WATCHER</span>
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em">STATUS</span>
+</div>
+<svg width="330" height="260" viewBox="0 0 334 260" role="img" aria-label="Riso-style flame: the kiln is firing">
+<circle cx="135" cy="128" r="104" fill="#FFE9A3" style="mix-blend-mode: multiply"></circle>
+<circle cx="225" cy="118" r="78" fill="#C9B8F5" style="mix-blend-mode: multiply"></circle>
+<path d="M167 30 C195 80 230 105 230 160 C230 205 200 236 167 236 C134 236 104 205 104 160 C104 122 128 104 140 72 C152 100 162 108 167 30 Z" fill="#FFE9A3"></path>
+<path d="M173 24 C201 74 236 99 236 154 C236 199 206 230 173 230 C140 230 110 199 110 154 C110 116 134 98 146 66 C158 94 168 102 173 24 Z" fill="none" stroke="#2F2A4A" stroke-width="5" stroke-linejoin="round"></path>
+</svg>
+<span style="font-family: 'Anton', sans-serif; font-size: 100px; line-height: 0.92">HOT.</span>
+<p style="margin: 0; font-size: 21px; font-weight: 700; line-height: 1.3">The kiln is closed and firing. Look, don't touch.</p>
+<div style="flex-grow: 1"></div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+<span style="font-size: 14px; font-weight: 700">Checked just now</span>
+<button style="min-height: 48px; padding: 0 20px; border: 3px solid #2F2A4A; border-radius: 12px; background: #FFFFFF; color: #2F2A4A; font-family: 'Anton', sans-serif; font-size: 18px; letter-spacing: 0.06em; box-shadow: 5px 5px 0 #2F2A4A; cursor: pointer">REFRESH</button>
+</div>
+</div>
+
+<div style="width: 390px; height: 780px; box-sizing: border-box; border: 4px solid #2F2A4A; border-radius: 28px; background: #A8DDF0; padding: 26px; display: flex; flex-direction: column; gap: 16px; box-shadow: 10px 10px 0 #2F2A4A">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<span style="font-family: 'Anton', sans-serif; font-size: 20px; letter-spacing: 0.04em">PART TIME KILN WATCHER</span>
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em">STATUS</span>
+</div>
+<svg width="330" height="260" viewBox="0 0 334 260" role="img" aria-label="Riso-style pots: the kiln is full">
+<circle cx="120" cy="120" r="96" fill="#FFB5C8" style="mix-blend-mode: multiply"></circle>
+<circle cx="226" cy="140" r="84" fill="#FFE9A3" style="mix-blend-mode: multiply"></circle>
+<g transform="translate(27,-14) scale(1.4)" fill="#FFB5C8">
+<path d="M38 156 C26 128 42 108 50 98 L50 78 L66 78 L66 98 C74 108 90 128 78 156 Z"></path>
+<path d="M86 124 L148 124 C148 146 134 156 117 156 C100 156 86 146 86 124 Z"></path>
+<rect x="138" y="104" width="34" height="52" rx="6"></rect>
+</g>
+<g transform="translate(32,-19) scale(1.4)" fill="none" stroke="#2F2A4A" stroke-width="3.5" stroke-linejoin="round">
+<path d="M38 156 C26 128 42 108 50 98 L50 78 L66 78 L66 98 C74 108 90 128 78 156 Z"></path>
+<path d="M86 124 L148 124 C148 146 134 156 117 156 C100 156 86 146 86 124 Z"></path>
+<rect x="138" y="104" width="34" height="52" rx="6"></rect>
+<path d="M172 116 C186 116 186 142 172 142"></path>
+<path d="M22 162 L186 162"></path>
+</g>
+</svg>
+<span style="font-family: 'Anton', sans-serif; font-size: 100px; line-height: 0.92">FULL.</span>
+<p style="margin: 0; font-size: 21px; font-weight: 700; line-height: 1.3">The kiln is open and full. It'll be unloaded soon!</p>
+<div style="flex-grow: 1"></div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+<span style="font-size: 14px; font-weight: 700">Checked just now</span>
+<button style="min-height: 48px; padding: 0 20px; border: 3px solid #2F2A4A; border-radius: 12px; background: #FFFFFF; color: #2F2A4A; font-family: 'Anton', sans-serif; font-size: 18px; letter-spacing: 0.06em; box-shadow: 5px 5px 0 #2F2A4A; cursor: pointer">REFRESH</button>
+</div>
+</div>
+
+<div style="width: 390px; height: 780px; box-sizing: border-box; border: 4px solid #2F2A4A; border-radius: 28px; background: #B9E8C4; padding: 26px; display: flex; flex-direction: column; gap: 16px; box-shadow: 10px 10px 0 #2F2A4A">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<span style="font-family: 'Anton', sans-serif; font-size: 20px; letter-spacing: 0.04em">PART TIME KILN WATCHER</span>
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em">STATUS</span>
+</div>
+<svg width="330" height="260" viewBox="0 0 334 260" role="img" aria-label="Riso-style empty kiln with space for pots">
+<circle cx="118" cy="132" r="100" fill="#FFB5C8" style="mix-blend-mode: multiply"></circle>
+<circle cx="228" cy="112" r="80" fill="#C9B8F5" style="mix-blend-mode: multiply"></circle>
+<rect x="78" y="46" width="150" height="160" rx="18" fill="#FFE9A3"></rect>
+<rect x="84" y="40" width="150" height="160" rx="18" fill="none" stroke="#2F2A4A" stroke-width="5"></rect>
+<path d="M234 46 L280 70 L280 222 L234 198" fill="none" stroke="#2F2A4A" stroke-width="5" stroke-linejoin="round"></path>
+<rect x="108" y="66" width="102" height="108" rx="8" fill="none" stroke="#2F2A4A" stroke-width="4" stroke-dasharray="10 9"></rect>
+<path d="M159 98 L159 142 M137 120 L181 120" stroke="#2F2A4A" stroke-width="6" stroke-linecap="round"></path>
+</svg>
+<span style="font-family: 'Anton', sans-serif; font-size: 100px; line-height: 0.92">EMPTY.</span>
+<p style="margin: 0; font-size: 21px; font-weight: 700; line-height: 1.3">All clear and ready for the next load. Shelve your pieces!</p>
+<div style="flex-grow: 1"></div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+<span style="font-size: 14px; font-weight: 700">Checked just now</span>
+<button style="min-height: 48px; padding: 0 20px; border: 3px solid #2F2A4A; border-radius: 12px; background: #FFFFFF; color: #2F2A4A; font-family: 'Anton', sans-serif; font-size: 18px; letter-spacing: 0.06em; box-shadow: 5px 5px 0 #2F2A4A; cursor: pointer">REFRESH</button>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1366,"height":908}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
