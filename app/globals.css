@@ -13,7 +13,16 @@
   --color-button: #ffffff; /* button fill */
 }
 
+/* Fonts are loaded by next/font in app/layout.tsx. */
+@theme inline {
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-display: var(--font-anton), Impact, sans-serif;
+}
+
 body {
+  margin: 0;
   background: var(--color-page);
   color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 500;
 }

@@ -14,6 +14,7 @@ export default defineConfig({
     },
   },
   test: {
+    setupFiles: ["test/setup-dom.ts"],
     include: integration ? ["**/*.integration.test.ts"] : ["**/*.test.{ts,tsx}"],
     exclude: [...configDefaults.exclude, ...(integration ? [] : ["**/*.integration.test.ts"])],
     coverage: {
