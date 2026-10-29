@@ -21,7 +21,7 @@ Most of the confidence comes from fast unit tests of pure domain logic, plus han
 | --- | --- | --- | --- |
 | Unit (domain) | `parseReadingInput`, `classify`, `toStatus` (never, fresh, exactly 24 h, older), `toDisplayState`, copy table | Vitest, node environment | `npm test` |
 | Handler | `postReading` and `getStatus`: auth (`401`), validation (`400`), `204` on success, which keys are written, OFFLINE with no data, status JSON shape | Vitest, real `Request`, in-memory store, fixed clock | `npm test` |
-| Component | `StatusCard` renders the right word, line, colour and icon for each display state. `StatusView` switches to OFFLINE when stale | Vitest with jsdom and Testing Library (added in step 3) | `npm test` |
+| Component | `StatusCard` renders the right word, line, colour and icon for each display state. `StatusView` switches to OFFLINE when stale | Vitest with jsdom (`// @vitest-environment jsdom`), Testing Library and user-event | `npm test` |
 | Store integration | The Redis `ReadingStore` matches the in-memory one: round trip, `LPUSH`/`LTRIM` cap | Vitest with real Upstash and a unique key prefix | `npm run test:integration` (needs `.env.local`) |
 | Smoke | A running server answers correctly end to end | `scripts/smoke.sh <base-url>` using `curl` | By hand: locally after changes, against production after deploys |
 | Visual | The page matches `docs/design/screens/*.png` | Manual comparison at 390 px and 1280 px wide | By hand in step 3 |

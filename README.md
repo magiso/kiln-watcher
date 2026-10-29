@@ -15,7 +15,7 @@ Shows whether a top-loading kiln is closed, open and full, or open and empty. An
 | --- | --- |
 | 1. Next.js app, Vercel project, Upstash integration | Done |
 | 2. Route handlers and shared types, tested with `curl` | Done |
-| 3. Status page (four display states) | Placeholder page; design reference, colours and icons saved |
+| 3. Status page (four display states) | Done |
 | 4. Calibrate thresholds after mounting | Not started; thresholds are placeholders |
 | 5. Connect the ESP32 | Separate session |
 | Later | History endpoint and list; reading tuning and unreliable-reading handling |
