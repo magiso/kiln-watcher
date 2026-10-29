@@ -1,11 +1,21 @@
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
+
+const root = (path: string) => fileURLToPath(new URL(path, import.meta.url));
+
+// Tests that need real Redis only run under `npm run test:integration`.
+const integration = process.env.INTEGRATION === "1";
 
 export default defineConfig({
   resolve: {
-    alias: { "@": fileURLToPath(new URL(".", import.meta.url)) },
+    alias: {
+      "@": root("."),
+      "server-only": root("test/stubs/server-only.ts"),
+    },
   },
   test: {
+    include: integration ? ["**/*.integration.test.ts"] : ["**/*.test.{ts,tsx}"],
+    exclude: [...configDefaults.exclude, ...(integration ? [] : ["**/*.integration.test.ts"])],
     coverage: {
       provider: "v8",
       include: ["app/**/*.{ts,tsx}", "lib/**/*.{ts,tsx}"],

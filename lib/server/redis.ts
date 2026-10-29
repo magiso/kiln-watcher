@@ -1,3 +1,4 @@
+import "server-only";
 import { Redis } from "@upstash/redis";
 
 let client: Redis | undefined;
@@ -15,8 +16,3 @@ export function redis(): Redis {
   }
   return client;
 }
-
-export const KEYS = {
-  latest: "kiln:latest",
-  history: "kiln:history",
-} as const;

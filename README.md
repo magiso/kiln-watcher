@@ -60,7 +60,7 @@ curl -X POST http://localhost:3000/api/readings \
   -d '{"deviceId":"kiln-1","distanceMm":482,"spreadMm":6,"validSamples":14,"intervalSec":14400,"trigger":"timer"}'
 ```
 
-Request and response shapes are defined in [lib/types.ts](lib/types.ts), which moves to `lib/domain/types.ts` in step 2.
+Request and response shapes are defined in [lib/domain/types.ts](lib/domain/types.ts).
 
 ## Layout
 
