@@ -34,15 +34,17 @@ lib/
     types.ts                 ReadingInput, StoredReading, Status, KilnState, DisplayState
     reading.ts               parseReadingInput(unknown) → ok | error list
     state.ts                 classify(distanceMm, config) → KilnState
-    status.ts                toStatus(latest | null, now, config) → Status (age, offline)
-    display.ts               toDisplayState(status) → CLOSED | OPEN_FULL | OPEN_EMPTY | OFFLINE
+    status.ts                toStatus(latest | null, now, config) → Status (display state, copy, age)
     copy.ts                  design copy per display state
+    format.ts                formatAge(seconds) → "3 h ago"
   server/                    I/O and wiring; starts with `import "server-only"`
     config.ts                reads and validates env once (thresholds, offline window, key prefix)
     auth.ts                  bearer token check (constant-time compare)
-    store.ts                 ReadingStore interface + Redis and in-memory implementations
-    redis.ts                 Upstash client (lazy)
-    handlers.ts              postReading / getStatus (request, deps) → Response
+    store.ts                 ReadingStore interface + in-memory implementation
+    store.contract.ts        shared behaviour tests for every ReadingStore
+    redis.ts                 Upstash client (lazy) + Redis ReadingStore
+    handlers.ts              postReading / getStatus / loadStatus (request, deps)
+    deps.ts                  production wiring: config, Redis store, real clock
 docs/                        plan, architecture, testing, design reference
 public/icons/                design SVG exports (reference; the app inlines them)
 scripts/

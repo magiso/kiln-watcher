@@ -27,6 +27,7 @@ export default defineConfig({
         "app/api/**/route.ts",
         "app/layout.tsx",
         "lib/server/redis.ts",
+        "lib/server/deps.ts",
       ],
       thresholds: { lines: 90, branches: 90, functions: 90, statements: 90 },
     },

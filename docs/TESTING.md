@@ -47,7 +47,8 @@ Coverage is measured with V8 over `app/**` and `lib/**`. A few files are exclude
 | `lib/domain/types.ts` | Types only; no runtime code |
 | `app/api/**/route.ts` | One-line adapters to tested handlers; covered by smoke checks |
 | `app/layout.tsx` | Font and metadata wiring only |
-| `lib/server/redis.ts` | Real client; covered by `test:integration` |
+| `lib/server/redis.ts` | Real client and Redis store; covered by `test:integration` |
+| `lib/server/deps.ts` | Production wiring (env, Redis, real clock); covered by smoke checks |
 
 Adding to this list needs a reason in the table. Don't add a file to it just to get the build passing.
 

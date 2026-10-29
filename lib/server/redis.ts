@@ -1,5 +1,7 @@
 import "server-only";
 import { Redis } from "@upstash/redis";
+import type { StoredReading } from "@/lib/domain/types";
+import { HISTORY_LIMIT, type ReadingStore, type StoreOptions } from "./store";
 
 let client: Redis | undefined;
 
@@ -15,4 +17,30 @@ export function redis(): Redis {
     client = new Redis({ url, token });
   }
   return client;
+}
+
+/** Redis-backed store: `<prefix>latest` (JSON) and `<prefix>history` (capped list, newest first). */
+export function createRedisStore(
+  db: Redis,
+  prefix: string,
+  { historyLimit = HISTORY_LIMIT }: StoreOptions = {},
+): ReadingStore {
+  const latestKey = `${prefix}latest`;
+  const historyKey = `${prefix}history`;
+  return {
+    async save(reading) {
+      await db
+        .multi()
+        .set(latestKey, reading)
+        .lpush(historyKey, reading)
+        .ltrim(historyKey, 0, historyLimit - 1)
+        .exec();
+    },
+    async latest() {
+      return (await db.get<StoredReading>(latestKey)) ?? null;
+    },
+    async history(limit) {
+      return db.lrange<StoredReading>(historyKey, 0, limit - 1);
+    },
+  };
 }
