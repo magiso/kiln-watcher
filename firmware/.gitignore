@@ -1,0 +1,4 @@
+.pio/
+.vscode/
+# Wi-Fi credentials and DEVICE_KEY. Copy secrets.example.h to create it.
+src/secrets.h
