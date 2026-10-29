@@ -40,7 +40,7 @@ The sensor sits on the wall, pointing roughly straight down from about 50 cm abo
 | --- | --- | --- |
 | `CLOSED` | Lid | ≈ 500 mm |
 | `OPEN_FULL` | Top of the ware | 500 mm + depth from rim to ware top |
-| `OPEN_EMPTY` | Kiln floor or bottom shelf | 500 mm + kiln depth |
+| `OPEN_EMPTY` | Kiln floor or bottom shelf | 500 mm + kiln depth (≈ 1500 mm, assuming 1 m depth) |
 
 - **The current server thresholds won't work for this mount.** The placeholders (`T_LID` 300, `T_EMPTY` 700) would read a closed lid as "open, full". They will be calibrated from real readings. We also need the kiln's inside depth.
 - **The HC-SR04 beam is a cone of about 15°.** At 50 cm it covers a circle about 13 cm across. Aim it at the middle of the kiln, away from the walls, and check that the open lid doesn't swing into it.
@@ -56,13 +56,15 @@ firmware/
   lib/
     measure/             pure C++: echo time → mm, median, spread (no Arduino headers)
     payload/             pure C++: builds the JSON body within a fixed buffer
-    retry/               pure C++: which responses to retry, backoff delays
+    retry/               pure C++: which responses to retry, backoff delays, LED blink codes
+    timing/              pure C++: wrap-safe intervals, debounced button with cooldown
   src/
     main.cpp             setup/loop: schedule, button, LEDs, Wi-Fi, HTTPS
     config.h             pins, interval, API URL
     secrets.example.h    template; the real secrets.h is git-ignored
   test/
-    test_measure/  test_payload/  test_retry/   (Unity, run natively)
+    fixtures/reading.json   request body shared with the web app's tests
+    test_measure/  test_payload/  test_retry/  test_timing/   (Unity, run natively)
 ```
 
 The `lib/` code has no hardware dependencies, so it is the part we unit-test. `main.cpp` stays thin wiring around it, mirroring the web app's domain/server split.
@@ -106,7 +108,7 @@ This follows [docs/TESTING.md](../docs/TESTING.md) where it applies to firmware.
 
 | Layer | What | How |
 | --- | --- | --- |
-| Unit | `measure`, `payload`, `retry`: medians with outliers and timeouts, IQR, mm conversion, JSON exactly matching `parseReadingInput`, retry decisions | `pio test -e native` (Unity), on the computer, no hardware |
+| Unit | `measure`, `payload`, `retry`, `timing`: medians with outliers and timeouts, IQR, mm conversion, JSON matching the shared fixture, retry decisions, millis() wrap, debounce and cooldown | `pio test -e native` (Unity), on the computer, no hardware |
 | Bench | The board on a breadboard posting to the local dev server (`KEY_PREFIX=dev:kiln:`) | Manual checklist: boot, timer, button, wrong key → 401 blink, Wi-Fi off → red LED and recovery |
 | Mounted | Real readings for closed, open full and open empty, cold and hot | `CAL` mode output, then set `T_LID` and `T_EMPTY` on Vercel |
 
@@ -114,14 +116,15 @@ Every branch of the pure libraries should be covered. The 90% gate is enforced o
 
 ## Build order
 
-1. **Scaffold:** set up PlatformIO (`esp32`, `native`), `secrets.example.h`, `.gitignore`, and install the PlatformIO CLI.
-2. **Pure libraries:** write `measure`, `payload` and `retry` test-first.
+1. **Scaffold** (done): PlatformIO (`esp32` pinned to espressif32 8.0.0 / Arduino core 3.3, `native`), `secrets.example.h`, `.gitignore`. Install the CLI with `brew install platformio`.
+2. **Pure libraries** (done): `measure`, `payload`, `retry` and `timing`, with 26 native tests.
 3. **Device firmware:** Wi-Fi, NTP, HTTPS POST with retries, sensor, button, LEDs, `CAL` mode.
 4. **Bench test:** wire it on the breadboard and post to the local dev server.
 5. **Mount and calibrate:** collect readings, set the thresholds and switch to production.
 
 ## Open questions
 
-- [ ] Inside depth of the kiln, and the usual height of a full load (for threshold placeholders)
-- [ ] Does the wall adapter have a 5 V USB output? If it's a barrel plug, use a USB phone charger instead
-- [ ] Wi-Fi at the kiln: plain WPA2, or a network with a login page (a login page needs a different approach). The ESP32 only supports 2.4 GHz
+- [ ] Inside depth of the kiln. **Assumed 1 m for now**, so closed ≈ 500 mm and empty ≈ 1500 mm. Provisional thresholds once mounted are about `T_LID` 650 and `T_EMPTY` 1350; these aren't applied to Vercel yet
+- [ ] Usual height of a full load
+- [ ] Wi-Fi at the kiln: **assumed plain WPA2** on 2.4 GHz. A network with a login page needs a different approach
+- [x] Wall adapter: 5 V USB output

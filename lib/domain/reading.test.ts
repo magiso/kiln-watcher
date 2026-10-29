@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { makeInput } from "@/test/builders";
 import { parseReadingInput } from "./reading";
@@ -10,6 +11,12 @@ describe("parseReadingInput", () => {
   test("accepts a button reading and boundary values", () => {
     const input = makeInput({ trigger: "button", distanceMm: 0, spreadMm: 0, validSamples: 0, intervalSec: 1 });
     expect(parseReadingInput(input)).toEqual({ ok: true, value: input });
+  });
+
+  // The same body the firmware's tests build (firmware/test/test_payload), keeping both sides in step.
+  test("accepts the firmware's payload fixture", () => {
+    const body = JSON.parse(readFileSync("firmware/test/fixtures/reading.json", "utf8"));
+    expect(parseReadingInput(body)).toEqual({ ok: true, value: makeInput() });
   });
 
   test("drops unknown fields", () => {

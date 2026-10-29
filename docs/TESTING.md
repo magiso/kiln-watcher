@@ -62,6 +62,7 @@ Adding to this list needs a reason in the table. Don't add a file to it just to 
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint |
 | `npm run build` | Production build. Also catches `server-only` import mistakes |
+| `cd firmware && pio test -e native` | Firmware unit tests (needs `brew install platformio`) |
 
 **Before every push:** `npm run lint && npm run typecheck && npm run test:coverage && npm run build`. Vercel runs only the build, so the other checks are on us. Add a GitHub Actions workflow running the same four commands once there is enough code to make it worthwhile.
 

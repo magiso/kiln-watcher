@@ -3,6 +3,10 @@
 #include <Arduino.h>
 
 #include "config.h"
+#include "measure.h"
+#include "payload.h"
+#include "retry.h"
+#include "timing.h"
 
 void setup() {
   Serial.begin(115200);
