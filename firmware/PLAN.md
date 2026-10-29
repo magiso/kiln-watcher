@@ -13,7 +13,8 @@ The Arduino Uno measures and decides when to report. The ESP-01 is a small Wi-Fi
 | 2 LEDs + 220 Ω resistors | Yes | Green = last send OK, red = problem |
 | Resistors for a divider (1 kΩ + 2 kΩ) and pull-ups (10 kΩ) | Yes | 5 V → 3.3 V on the ESP's RX pin; boot pins |
 | Wall adapter | Yes | Powers the Uno (7–12 V barrel jack, or 5 V USB) |
-| **3.3 V regulator for the ESP-01** (AMS1117-3.3 module, or an ESP-01 breadboard adapter that includes one) | **Buy** | The ESP-01 draws up to ~300 mA when transmitting, and the Uno's 3.3 V pin can't supply that. This is the most common cause of ESP-01 resets |
+| Breadboard + jumper wires | Yes | Bench build. Check you have female-to-male jumpers: the ESP-01's 2×4 pin header can't plug straight into a breadboard, because facing pins would short together |
+| **ESP-01 breadboard adapter with a 3.3 V regulator** (recommended), or an AMS1117-3.3 module plus female-to-male jumpers | **Buy** | The ESP-01 draws up to ~300 mA when transmitting, and the Uno's 3.3 V pin can't supply that. This is the most common cause of ESP-01 resets. The adapter also fans the 2×4 header out into a single breadboard-friendly row, and many include level shifting on RX |
 | **ESP-01 USB programmer** with a PROG switch | **Buy** (recommended) | Flashing the ESP-01. The Uno can do it as a USB-serial bridge, but it is fiddly |
 | 10 µF + 100 nF capacitors across the ESP-01 supply | Buy if missing | Smooth Wi-Fi current spikes |
 
@@ -149,4 +150,4 @@ Every branch of the pure libraries should be covered. The 90% gate is enforced o
 - [ ] Is it an ESP-01 or an ESP-01S? Both work; the S has the pull-ups built in
 - [ ] Wall adapter voltage (barrel 7–12 V, or 5 V USB)
 - [ ] Wi-Fi at the kiln: plain WPA2, or a network with a login page (a login page needs a different approach)
-- [ ] Buy the 3.3 V regulator (and ideally the ESP-01 USB programmer) before step 3
+- [ ] Buy the ESP-01 breadboard adapter with regulator (and ideally the ESP-01 USB programmer) before step 3
