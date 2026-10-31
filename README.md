@@ -105,7 +105,4 @@ All are server-only. Don't prefix them with `NEXT_PUBLIC_`.
 
 ## Open items
 
-- [ ] Calibrate `T_LID` and `T_EMPTY` from real readings after mounting. The placeholders (300 / 700 mm) assume the plan's example. A sensor mounted about 50 cm above a closed lid would need a higher `T_LID`.
-- [ ] Later: decide how to handle unreliable readings (`validSamples`, `spreadMm`).
-- [ ] Confirm the open lid stays out of the sensor's beam.
-- [ ] Hot-kiln readings run a few cm short, so leave margin between thresholds.
+Values and assumptions still to check and set are tracked in [docs/CHECKLIST.md](docs/CHECKLIST.md).

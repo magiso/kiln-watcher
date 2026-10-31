@@ -117,6 +117,8 @@ Every branch of the pure libraries should be covered. The 90% gate is enforced o
 
 ## Open questions
 
+All values still to set, firmware and web, are tracked in [docs/CHECKLIST.md](../docs/CHECKLIST.md).
+
 - [ ] Inside depth of the kiln. **Assumed 1 m for now**, so closed ≈ 500 mm and empty ≈ 1500 mm. Provisional thresholds once mounted are about `T_LID` 650 and `T_EMPTY` 1350; these aren't applied to Vercel yet
 - [ ] Usual height of a full load
 - [ ] Wi-Fi at the kiln: **assumed plain WPA2** on 2.4 GHz. A network with a login page needs a different approach
