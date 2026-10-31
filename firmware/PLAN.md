@@ -22,10 +22,10 @@ The ESP32's pins are 3.3 V and **not 5 V tolerant**. The HC-SR04 runs on 5 V, so
 | --- | --- | --- |
 | HC-SR04 VCC | ESP32 `VIN` / `5V` | The 5 V from USB |
 | HC-SR04 GND | ESP32 `GND` | |
-| HC-SR04 TRIG | GPIO 12 (`D12`) | A 3.3 V trigger is enough for the HC-SR04 |
+| HC-SR04 TRIG | GPIO 25 (`D25`) | A 3.3 V trigger is enough for the HC-SR04 |
 | HC-SR04 ECHO | 1 kΩ → GPIO 13 (`D13`), and GPIO 13 → 2 kΩ → GND | Divider: 5 V × 2/3 ≈ 3.3 V |
 
-These are the pins on the current breadboard. GPIO 12 is a boot-strapping pin: if it is held high at power-on, the board sets the wrong flash voltage and won't boot. The HC-SR04's TRIG input doesn't pull it high, so it's fine as wired. If the board ever boot-loops after a wiring change, move TRIG to GPIO 25 and update `config.h`. Some boards label `VIN` as `5V`.
+These avoid the boot-strapping pins (0, 2, 5, 12, 15) and the flash pins (6–11). Some boards label `VIN` as `5V`.
 
 The button and LEDs are deferred. The serial commands below cover on-demand readings for now.
 
@@ -87,7 +87,7 @@ The `lib/` code has no hardware dependencies, so it is the part we unit-test. `m
 
 ### Secrets
 
-`src/secrets.h` holds the Wi-Fi SSID and password and `DEVICE_KEY`. It is git-ignored; `secrets.example.h` is committed. To test against a local dev server, set `KILN_API_URL` in `config.h` to `http://<computer-ip>:3000`.
+`src/secrets.h` holds the Wi-Fi SSID and password and `DEVICE_KEY`. It is git-ignored; `secrets.example.h` is committed. To test against a local dev server, flash the `desk` env: `DEV_HOST=<computer-ip> pio run -e desk -t upload`, with `npm run dev -- -H 0.0.0.0` running. It posts to the `dev:kiln:` keys.
 
 ### Flashing
 
