@@ -65,12 +65,12 @@ export function StatusCard(props: StatusCardProps) {
           data-state={status.state}
           className={`${colour} flex min-h-svh flex-col gap-4 px-6 py-7 lg:min-h-0 lg:flex-row lg:flex-wrap lg:items-center lg:gap-12 lg:rounded-[36px] lg:border-4 lg:border-ink lg:p-12 lg:shadow-[14px_14px_0_var(--color-ink)]`}
         >
-          <div className="flex items-start justify-between gap-3 lg:hidden">
-            <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-0.5 lg:hidden">
+            <div className="flex items-center justify-between gap-3">
               <p className="font-display text-xl tracking-[0.04em]">PART TIME KILN WATCHER</p>
-              <p className="text-xs italic">Made by Miso</p>
+              <p className="text-xs font-bold tracking-[0.12em]">STATUS</p>
             </div>
-            <p className="text-xs font-bold tracking-[0.12em]">STATUS</p>
+            <p className="text-xs italic">Made by Miso</p>
           </div>
 
           <div className="flex justify-center lg:min-w-0 lg:flex-[1_1_340px]">
