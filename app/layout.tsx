@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { Anton, DM_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -9,8 +9,6 @@ export const metadata: Metadata = {
   title: "Part Time Kiln Watcher",
   description: "Is the kiln firing, full or empty?",
 };
-
-export const viewport: Viewport = { themeColor: "#F7F4F2" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

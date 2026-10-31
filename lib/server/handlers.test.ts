@@ -109,6 +109,7 @@ describe("getStatus", () => {
       distanceMm: 482,
       measuredAt: "2026-10-28T04:30:00.000Z",
       ageSeconds: 5400,
+      nextReadingInSeconds: 9000,
       trigger: "timer",
     });
   });

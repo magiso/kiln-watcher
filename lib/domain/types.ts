@@ -43,5 +43,7 @@ export interface Status {
   distanceMm: number | null;
   measuredAt: string | null;
   ageSeconds: number | null;
+  /** Seconds until the device's next scheduled reading (measuredAt + intervalSec); negative when it is late. */
+  nextReadingInSeconds: number | null;
   trigger: Trigger | null;
 }

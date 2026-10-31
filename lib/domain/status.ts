@@ -9,6 +9,7 @@ export const NO_READING_STATUS: Status = {
   distanceMm: null,
   measuredAt: null,
   ageSeconds: null,
+  nextReadingInSeconds: null,
   trigger: null,
 };
 
@@ -23,8 +24,9 @@ export function toStatus(
 ): Status {
   if (!latest) return NO_READING_STATUS;
 
+  const sinceReading = (now.getTime() - Date.parse(latest.measuredAt)) / 1000;
   // Clamp at zero so a small clock skew never produces a negative age.
-  const ageSeconds = Math.max(0, Math.floor((now.getTime() - Date.parse(latest.measuredAt)) / 1000));
+  const ageSeconds = Math.max(0, Math.floor(sinceReading));
   const offline = ageSeconds > config.offlineAfterHours * 3600;
   const state = offline ? "OFFLINE" : latest.state;
 
@@ -35,6 +37,7 @@ export function toStatus(
     distanceMm: latest.distanceMm,
     measuredAt: latest.measuredAt,
     ageSeconds,
+    nextReadingInSeconds: Math.ceil(latest.intervalSec - sinceReading),
     trigger: latest.trigger,
   };
 }

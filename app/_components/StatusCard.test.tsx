@@ -32,11 +32,22 @@ describe("StatusCard", () => {
     expect(screen.queryByText("SENSOR DISCONNECTED")).not.toBeInTheDocument();
   });
 
-  test("shows how long ago the kiln was checked, and no buttons", () => {
+  test("shows how long ago the kiln was checked and when the next check is due, and no buttons", () => {
     renderCard({ status: statusFor("CLOSED", 7200) });
     // Rendered twice: in the desktop header and the mobile footer; CSS shows one.
     expect(screen.getAllByText("Checked 2 h ago")).toHaveLength(2);
+    expect(screen.getAllByText("Next check: in 2 h")).toHaveLength(2);
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
+
+  test("says the next check is overdue when the sensor is well past it", () => {
+    renderCard({ status: statusFor("OPEN_EMPTY", 6 * 3600) });
+    expect(screen.getAllByText("Next check: overdue")).toHaveLength(2);
+  });
+
+  test("sets the browser theme colour to the card colour", () => {
+    renderCard({ status: statusFor("OPEN_EMPTY") });
+    expect(document.querySelector('meta[name="theme-color"]')).toHaveAttribute("content", "#b9e8c4");
   });
 
   test("OFFLINE uses the disconnected design with the last reading's age", () => {
@@ -48,6 +59,7 @@ describe("StatusCard", () => {
     expect(card()).toHaveClass("bg-offline");
     expect(screen.getByRole("img", { name: "Sensor disconnected" })).toBeInTheDocument();
     expect(screen.getAllByText("Last reading 2 days ago")).toHaveLength(2);
+    expect(screen.queryByText(/Next check/)).not.toBeInTheDocument();
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 

@@ -16,6 +16,7 @@ describe("toStatus", () => {
       distanceMm: null,
       measuredAt: null,
       ageSeconds: null,
+      nextReadingInSeconds: null,
       trigger: null,
     });
   });
@@ -30,6 +31,7 @@ describe("toStatus", () => {
       distanceMm: 120,
       measuredAt,
       ageSeconds: 5400,
+      nextReadingInSeconds: 9000,
       trigger: "button",
     });
   });
@@ -54,6 +56,14 @@ describe("toStatus", () => {
   test("uses the configured offline window", () => {
     const status = toStatus(makeReading({ measuredAt }), after(2 * 3600), { offlineAfterHours: 1 });
     expect(status.state).toBe("OFFLINE");
+  });
+
+  test.each([
+    [0, 14400],
+    [14400, 0],
+    [15000, -600],
+  ])("at %i s old, the next 4-hourly reading is due in %i s", (age, next) => {
+    expect(toStatus(makeReading({ measuredAt, intervalSec: 14400 }), after(age), testConfig).nextReadingInSeconds).toBe(next);
   });
 
   test("rounds age down to whole seconds and never goes negative", () => {
