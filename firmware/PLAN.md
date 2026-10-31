@@ -1,15 +1,13 @@
 # Firmware plan
 
-One ESP32 dev board reads the HC-SR04, handles the button and LEDs, and posts readings to the API over HTTPS. It is built with PlatformIO, and the pure logic is unit-tested on the computer. The Arduino Uno and ESP-01 aren't needed. An earlier version of this plan used them; see git history.
+One ESP32 dev board reads the HC-SR04 and posts readings to the API over HTTPS. It is built with PlatformIO, and the pure logic is unit-tested on the computer. The Arduino Uno and ESP-01 aren't needed. An earlier version of this plan used them; see git history.
 
 ## Hardware
 
 | Part | Role |
 | --- | --- |
-| ESP32 dev board: ESP32-WROOM-32, CH9102 USB-serial, headers soldered (PlatformIO `board = esp32dev`) | Everything: sensor, button, LEDs, Wi-Fi, HTTPS |
+| ESP32 dev board: ESP32-WROOM-32, CH9102 USB-serial, headers soldered (PlatformIO `board = esp32dev`) | Everything: sensor, Wi-Fi, HTTPS |
 | HC-SR04 | Distance, on the wall about 50 cm above the kiln, pointing down |
-| Push button | Take and send a reading now |
-| 2 LEDs + 2 × 220 Ω | Green = last send OK, red = problem |
 | 1 kΩ + 2 kΩ resistors | Divider on the HC-SR04 echo line (5 V → 3.3 V) |
 | Breadboard + jumper wires | Bench build |
 | Wall adapter | Powers the board through its USB-C port (needs 5 V USB output) |
@@ -24,13 +22,12 @@ The ESP32's pins are 3.3 V and **not 5 V tolerant**. The HC-SR04 runs on 5 V, so
 | --- | --- | --- |
 | HC-SR04 VCC | ESP32 `VIN` / `5V` | The 5 V from USB |
 | HC-SR04 GND | ESP32 `GND` | |
-| HC-SR04 TRIG | GPIO 25 | A 3.3 V trigger is enough for the HC-SR04 |
-| HC-SR04 ECHO | 1 kΩ → GPIO 34, and GPIO 34 → 2 kΩ → GND | Divider: 5 V × 2/3 ≈ 3.3 V. GPIO 34 is input-only, which is fine |
-| Button | GPIO 27 ↔ GND | Internal pull-up |
-| Green LED | GPIO 26 → 220 Ω → LED → GND | |
-| Red LED | GPIO 33 → 220 Ω → LED → GND | |
+| HC-SR04 TRIG | GPIO 12 (`D12`) | A 3.3 V trigger is enough for the HC-SR04 |
+| HC-SR04 ECHO | 1 kΩ → GPIO 13 (`D13`), and GPIO 13 → 2 kΩ → GND | Divider: 5 V × 2/3 ≈ 3.3 V |
 
-These pins avoid the ESP32's boot-strapping pins (0, 2, 5, 12, 15) and the flash pins (6–11). Some boards label `VIN` as `5V`.
+These are the pins on the current breadboard. GPIO 12 is a boot-strapping pin: if it is held high at power-on, the board sets the wrong flash voltage and won't boot. The HC-SR04's TRIG input doesn't pull it high, so it's fine as wired. If the board ever boot-loops after a wiring change, move TRIG to GPIO 25 and update `config.h`. Some boards label `VIN` as `5V`.
+
+The button and LEDs are deferred. The serial commands below cover on-demand readings for now.
 
 ## Mounting
 
@@ -59,7 +56,7 @@ firmware/
     retry/               pure C++: which responses to retry, backoff delays, LED blink codes
     timing/              pure C++: wrap-safe intervals, debounced button with cooldown
   src/
-    main.cpp             setup/loop: schedule, button, LEDs, Wi-Fi, HTTPS
+    main.cpp             setup/loop: schedule, sensor, Wi-Fi, clock, HTTPS, serial commands
     config.h             pins, interval, API URL
     secrets.example.h    template; the real secrets.h is git-ignored
   test/
@@ -73,7 +70,7 @@ The `lib/` code has no hardware dependencies, so it is the part we unit-test. `m
 
 1. **On boot:** connect to Wi-Fi, sync time over NTP (needed to check certificate dates), then take and send a first reading (`trigger: "timer"`).
 2. **Every `intervalSec`** (default 4 h = 14400 s) it takes and sends a reading. There's no deep sleep, because it's on wall power.
-3. **Button:** after debouncing, it takes and sends a reading now (`trigger: "button"`). There's a 30 s cooldown so repeated presses don't spam the server.
+3. **Button (deferred):** after debouncing, it will take and send a reading now (`trigger: "button"`), with a 30 s cooldown. `timing::Button` is ready for it.
 4. **Measurement:** 15 pings, 60 ms apart, each with a 30 ms echo timeout.
    - Pings with no echo are discarded. `validSamples` is the count that remain.
    - `distanceMm` is the median.
@@ -84,13 +81,9 @@ The `lib/` code has no hardware dependencies, so it is the part we unit-test. `m
    - Retry network errors, timeouts, `500` and `503` twice, with 5 s and 15 s backoff.
    - `400` and `401` are never retried.
 6. **TLS:** the server certificate is verified with the Arduino-ESP32 core's built-in root CA bundle (`setCACertBundle`). That keeps working if Vercel changes certificate authority. Skipping verification (`setInsecure`) would leave the device key open to anyone on the network, so it is not used.
-7. **LEDs:**
-   - green on: last send succeeded
-   - red on: last send failed
-   - both blinking: working
-   - red blink code: 2 blinks = 401 (wrong key), 3 blinks = 400 (bad body)
-8. **Resilience:** it reconnects Wi-Fi when the link drops. A task watchdog restarts the board if the loop hangs.
-9. **USB serial (115200 baud):** it logs each reading and response. A `CAL` command prints a reading every 2 s without sending, for calibration.
+7. **LEDs (deferred):** green = last send succeeded, red = failed, red blink code 2 = 401 (wrong key), 3 = 400 (bad body). `retry::blinkCode` is ready for it.
+8. **Resilience:** it reconnects Wi-Fi before each send if the link has dropped, and a reading with no echoes is not sent. A watchdog is still to do.
+9. **USB serial (115200 baud):** it logs each reading, each attempt and its HTTP status. Type `m` to measure without sending (for calibration) or `s` to measure and send now (`trigger: "button"`, the on-demand trigger).
 
 ### Secrets
 
@@ -109,8 +102,8 @@ This follows [docs/TESTING.md](../docs/TESTING.md) where it applies to firmware.
 | Layer | What | How |
 | --- | --- | --- |
 | Unit | `measure`, `payload`, `retry`, `timing`: medians with outliers and timeouts, IQR, mm conversion, JSON matching the shared fixture, retry decisions, millis() wrap, debounce and cooldown | `pio test -e native` (Unity), on the computer, no hardware |
-| Bench | The board on a breadboard posting to the local dev server (`KEY_PREFIX=dev:kiln:`) | Manual checklist: boot, timer, button, wrong key → 401 blink, Wi-Fi off → red LED and recovery |
-| Mounted | Real readings for closed, open full and open empty, cold and hot | `CAL` mode output, then set `T_LID` and `T_EMPTY` on Vercel |
+| Bench | The board on a breadboard posting to the local dev server (`KEY_PREFIX=dev:kiln:`) | Manual checklist: boot, first reading stored, `s` stored, wrong key → 401 logged and not retried, Wi-Fi off → retries then recovery on the next reading |
+| Mounted | Real readings for closed, open full and open empty, cold and hot | Serial `m` output, then set `T_LID` and `T_EMPTY` on Vercel |
 
 Every branch of the pure libraries should be covered. The 90% gate is enforced only for the web app.
 
@@ -118,7 +111,7 @@ Every branch of the pure libraries should be covered. The 90% gate is enforced o
 
 1. **Scaffold** (done): PlatformIO (`esp32` pinned to espressif32 8.0.0 / Arduino core 3.3, `native`), `secrets.example.h`, `.gitignore`. Install the CLI with `brew install platformio`.
 2. **Pure libraries** (done): `measure`, `payload`, `retry` and `timing`, with 26 native tests.
-3. **Device firmware:** Wi-Fi, NTP, HTTPS POST with retries, sensor, button, LEDs, `CAL` mode.
+3. **Device firmware** (done, not yet run on the board): Wi-Fi, NTP, HTTPS POST with retries, sensor, serial `m`/`s` commands. Button, LEDs and watchdog deferred.
 4. **Bench test:** wire it on the breadboard and post to the local dev server.
 5. **Mount and calibrate:** collect readings, set the thresholds and switch to production.
 
