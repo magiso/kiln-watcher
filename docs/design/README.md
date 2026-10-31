@@ -86,3 +86,16 @@ All twelve SVGs share a 334 × 260 viewBox, so the layers line up when stacked.
 | Sensor disconnected | `kiln-disconnected.svg` | `kiln-disconnected-icon.svg` | `kiln-disconnected-circles.svg` |
 
 The circles use `mix-blend-mode: multiply`. They only look right on their own state colour and look lighter on white. Inline the SVG markup inside the coloured card. An SVG loaded through `<img>` or `next/image` is isolated, so its circles only blend with each other and not with the card behind them.
+
+## Motion
+
+Each icon loops gently (31 Oct 2026, owner's call; reference: the "Icon Motion" artifact). The keyframes live in `app/globals.css`, and every loop rests on the static artwork above.
+
+| State | Motion |
+| --- | --- |
+| `CLOSED` | The flame flickers from its base, two embers drift up and fade, and the circles breathe. |
+| `OPEN_FULL` | The vase, bowl and mug take turns doing a small hop on the shelf, and the circles breathe. |
+| `OPEN_EMPTY` | The dashed outline marches round, the plus sign pulses, and the circles breathe. |
+| Sensor disconnected | The plug and socket tug apart and back together, and the sparks flash as they nearly touch. |
+
+With `prefers-reduced-motion: reduce` the icons stay still and the embers are hidden. Put the breathing animation on the circle itself, never on a wrapping group: a transformed group isolates the circles and stops the multiply blend reaching the card.

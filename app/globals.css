@@ -25,3 +25,108 @@ body {
   font-family: var(--font-sans);
   font-weight: 500;
 }
+
+/* Icon motion (docs/design/README.md#motion). Each loop rests on the static artwork.
+   Glow classes sit on the circles themselves: a transformed wrapper would isolate
+   them and stop the multiply blend reaching the card. */
+.kiln-glow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: kiln-glow 3.3s ease-in-out infinite alternate;
+}
+.kiln-glow-b {
+  animation-duration: 4.3s;
+  animation-direction: alternate-reverse;
+}
+.kiln-flame {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: kiln-flicker 1.4s ease-in-out infinite;
+}
+.kiln-ember {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: kiln-rise 2.4s ease-out infinite;
+}
+.kiln-ember-b {
+  animation-delay: 1.2s;
+}
+.kiln-pot {
+  animation: kiln-hop 2.4s ease-in-out infinite;
+}
+.kiln-pot-2 {
+  animation-delay: 0.25s;
+}
+.kiln-pot-3 {
+  animation-delay: 0.5s;
+}
+.kiln-dash {
+  animation: kiln-march 1.4s linear infinite;
+}
+.kiln-plus {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: kiln-pulse 1.8s ease-in-out infinite;
+}
+.kiln-plug {
+  animation: kiln-pull 2s ease-in-out infinite;
+}
+.kiln-socket {
+  animation: kiln-push 2s ease-in-out infinite;
+}
+.kiln-sparks {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: kiln-spark 2s ease-in-out infinite;
+}
+
+@keyframes kiln-glow {
+  from { transform: scale(0.95); }
+  to { transform: scale(1.05); }
+}
+@keyframes kiln-flicker {
+  0%, 100% { transform: scale(1, 1) skewX(0deg); }
+  25% { transform: scale(1.03, 0.96) skewX(2deg); }
+  50% { transform: scale(0.98, 1.06) skewX(-2deg); }
+  75% { transform: scale(1.02, 0.98) skewX(1deg); }
+}
+@keyframes kiln-rise {
+  0% { transform: translateY(8px); opacity: 0; }
+  25% { opacity: 1; }
+  100% { transform: translateY(-26px); opacity: 0; }
+}
+@keyframes kiln-hop {
+  0%, 40%, 100% { transform: translateY(0); }
+  15% { transform: translateY(-7px); }
+  28% { transform: translateY(0); }
+  33% { transform: translateY(-2px); }
+}
+@keyframes kiln-march {
+  to { stroke-dashoffset: -19; }
+}
+@keyframes kiln-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+@keyframes kiln-pull {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-9px); }
+}
+@keyframes kiln-push {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+@keyframes kiln-spark {
+  0%, 100% { opacity: 1; transform: scale(1.1); }
+  14%, 86% { opacity: 0; transform: scale(0.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kiln-icon * {
+    animation: none !important;
+  }
+  /* Embers only exist in motion; the static design has none. */
+  .kiln-ember {
+    display: none;
+  }
+}

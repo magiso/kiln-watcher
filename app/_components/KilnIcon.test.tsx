@@ -18,3 +18,10 @@ test.each([
   const blended = [...svg.querySelectorAll("circle")].filter((c) => c.style.mixBlendMode === "multiply");
   expect(blended).toHaveLength(2);
 });
+
+test("carries the kiln-icon class that scopes its motion, with or without a className", () => {
+  const { container, rerender } = render(<KilnIcon state="CLOSED" />);
+  expect(container.querySelector("svg")).toHaveAttribute("class", "kiln-icon");
+  rerender(<KilnIcon state="CLOSED" className="icon" />);
+  expect(container.querySelector("svg")).toHaveAttribute("class", "kiln-icon icon");
+});
