@@ -23,7 +23,7 @@ The ESP32's pins are 3.3 V and **not 5 V tolerant**. The HC-SR04 runs on 5 V, so
 | HC-SR04 VCC | ESP32 `VIN` / `5V` | The 5 V from USB |
 | HC-SR04 GND | ESP32 `GND` | |
 | HC-SR04 TRIG | GPIO 25 (`D25`) | A 3.3 V trigger is enough for the HC-SR04 |
-| HC-SR04 ECHO | 1 kΩ → GPIO 13 (`D13`), and GPIO 13 → 2 kΩ → GND | Divider: 5 V × 2/3 ≈ 3.3 V |
+| HC-SR04 ECHO | 1 kΩ → GPIO 26 (`D26`), and GPIO 26 → 2 kΩ → GND | Divider: 5 V × 2/3 ≈ 3.3 V |
 
 These avoid the boot-strapping pins (0, 2, 5, 12, 15) and the flash pins (6–11). Some boards label `VIN` as `5V`.
 

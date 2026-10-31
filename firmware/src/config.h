@@ -7,7 +7,7 @@
 namespace config {
 
 constexpr uint8_t PIN_TRIG = 25;  // D25
-constexpr uint8_t PIN_ECHO = 13;  // D13. The echo is 5 V, so it should go through the 1k/2k divider
+constexpr uint8_t PIN_ECHO = 26;  // D26. The echo is 5 V, so it should go through the 1k/2k divider
 
 constexpr const char* DEVICE_ID = "kiln-1";
 constexpr uint32_t INTERVAL_SEC = 4 * 60 * 60;
