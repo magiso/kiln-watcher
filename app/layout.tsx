@@ -3,7 +3,7 @@ import { Anton, DM_Sans } from "next/font/google";
 import "./globals.css";
 
 const anton = Anton({ variable: "--font-anton", weight: "400", subsets: ["latin"] });
-const dmSans = DM_Sans({ variable: "--font-dm-sans", weight: ["500", "700"], subsets: ["latin"] });
+const dmSans = DM_Sans({ variable: "--font-dm-sans", weight: ["500", "700"], style: ["normal", "italic"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Part Time Kiln Watcher",

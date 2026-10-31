@@ -32,6 +32,11 @@ describe("StatusCard", () => {
     expect(screen.queryByText("SENSOR DISCONNECTED")).not.toBeInTheDocument();
   });
 
+  test("credits the maker under the logo on mobile and desktop", () => {
+    renderCard({ status: statusFor("CLOSED") });
+    expect(screen.getAllByText("Made by Miso")).toHaveLength(2);
+  });
+
   test("shows how long ago the kiln was checked and when the next check is due, and no buttons", () => {
     renderCard({ status: statusFor("CLOSED", 7200) });
     // Rendered twice: in the desktop header and the mobile footer; CSS shows one.

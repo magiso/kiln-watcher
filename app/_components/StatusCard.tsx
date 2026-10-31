@@ -51,7 +51,10 @@ export function StatusCard(props: StatusCardProps) {
       <meta name="theme-color" content={THEME_COLOUR[status.state]} />
       <div className="mx-auto flex max-w-[420px] flex-col gap-8 lg:max-w-[1160px]">
         <header className="hidden flex-wrap items-center justify-between gap-4 lg:flex">
-          <p className="font-display text-[30px] tracking-[0.04em]">PART TIME KILN WATCHER</p>
+          <div className="flex flex-col gap-0.5">
+            <p className="font-display text-[30px] tracking-[0.04em]">PART TIME KILN WATCHER</p>
+            <p className="text-sm italic">Made by Miso</p>
+          </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2.5 text-[15px] font-bold">
             <p aria-live="polite">{meta}</p>
             {next && <p className="border-l-[3px] border-ink pl-6 leading-[1.6]">{next}</p>}
@@ -62,8 +65,11 @@ export function StatusCard(props: StatusCardProps) {
           data-state={status.state}
           className={`${colour} flex min-h-svh flex-col gap-4 px-6 py-7 lg:min-h-0 lg:flex-row lg:flex-wrap lg:items-center lg:gap-12 lg:rounded-[36px] lg:border-4 lg:border-ink lg:p-12 lg:shadow-[14px_14px_0_var(--color-ink)]`}
         >
-          <div className="flex items-baseline justify-between gap-3 lg:hidden">
-            <p className="font-display text-xl tracking-[0.04em]">PART TIME KILN WATCHER</p>
+          <div className="flex items-start justify-between gap-3 lg:hidden">
+            <div className="flex flex-col gap-0.5">
+              <p className="font-display text-xl tracking-[0.04em]">PART TIME KILN WATCHER</p>
+              <p className="text-xs italic">Made by Miso</p>
+            </div>
             <p className="text-xs font-bold tracking-[0.12em]">STATUS</p>
           </div>
 

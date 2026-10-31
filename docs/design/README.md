@@ -47,6 +47,7 @@ A stale reading uses the `offline` colour. `UNKNOWN` ("Unclear reading") has no 
 Both fonts are free on Google Fonts. Load them with `next/font/google`.
 
 - **Anton**: the logo ("PART TIME KILN WATCHER"), and the status word.
+- **DM Sans 500 italic**: "Made by Miso" under the logo, 12px on mobile and 14px on desktop, 2px below it.
 - **DM Sans**, weights 500 and 700: body text and labels.
 
 | Element | Mobile | Desktop |
