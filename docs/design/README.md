@@ -20,7 +20,7 @@ The desktop boards for the other states are [desktop-closed.png](screens/desktop
 | `docs/design/Desktop{Closed,Full,Empty}.dc.html` | Desktop board for each state (1280 × 800) |
 | `docs/design/DisconnectedMobile.dc.html`, `docs/design/DesktopDisconnected.dc.html` | Sensor-disconnected screen, mobile and desktop |
 | `docs/design/canvas.json` | Canvas layout metadata |
-| `docs/design/screens/*.png` | Renders of the boards above. **Out of date:** they still show the REFRESH button and lack the "Next check" line, and so do the `.dc.html` sources. The current design is described under Layout below |
+| `docs/design/screens/*.png` | Renders of the boards above (PNG 1× exports, updated 31 Oct 2026) |
 | `public/icons/*.svg` | Icon assets, served at `/icons/...` |
 
 The `.dc.html` files come from the design canvas. They are plain HTML with inline styles, so you can read exact measurements from them. They reference a `support.js` canvas runtime that isn't included and isn't needed.
@@ -59,7 +59,7 @@ Both fonts are free on Google Fonts. Load them with `next/font/google`.
 ## Shapes
 
 - **Card**: a 4px ink border, a state-colour fill and a hard offset shadow with no blur. On mobile the card has a 28px radius, a `10px 10px 0` shadow and 26px padding. On desktop it has a 36px radius, a `14px 14px 0` shadow and 48px padding, inside a page that is at most 1160px wide. The copy is at most 480px wide.
-- **Layout**: on mobile the logo sits above the icon, then the status word and copy. Pinned to the bottom is a 3px ink rule, then "Checked …" on the left and "Next check: …" on the right. On desktop the logo forms a header row with "Checked … | Next check: …" (a 3px ink divider between them) above one wide card, with the icon on the left and the text on the right.
+- **Layout**: on mobile the logo sits above the icon, then the status word and copy. Pinned to the bottom is a 3px ink rule with 14px below it, then "Checked …" on the left and "Next check: …" on the right. On desktop the logo forms a header row with "Checked … | Next check: …" (a 3px ink left border on "Next check", with 24px padding and a 24px gap) above one wide card, with the icon on the left and the text on the right.
 - **Mobile is full-bleed** (31 Oct 2026, owner's call; the design boards still show a bordered card on the page background): below the `lg` breakpoint the card colour fills the whole screen, with no page margin, border, radius or shadow, and the browser theme colour matches the card.
 - **Next check** is the time until the device's next scheduled reading (`measuredAt + intervalSec`): "in 3 h", "due now", or "overdue" once more than 15 minutes late.
 

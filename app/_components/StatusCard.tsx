@@ -52,14 +52,9 @@ export function StatusCard(props: StatusCardProps) {
       <div className="mx-auto flex max-w-[420px] flex-col gap-8 lg:max-w-[1160px]">
         <header className="hidden flex-wrap items-center justify-between gap-4 lg:flex">
           <p className="font-display text-[30px] tracking-[0.04em]">PART TIME KILN WATCHER</p>
-          <div className="flex items-center gap-5 text-[15px] font-bold">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2.5 text-[15px] font-bold">
             <p aria-live="polite">{meta}</p>
-            {next && (
-              <>
-                <span aria-hidden className="h-6 w-[3px] bg-ink" />
-                <p>{next}</p>
-              </>
-            )}
+            {next && <p className="border-l-[3px] border-ink pl-6 leading-[1.6]">{next}</p>}
           </div>
         </header>
 
@@ -95,8 +90,8 @@ export function StatusCard(props: StatusCardProps) {
           <div className="grow lg:hidden" />
 
           <footer
-            className={`flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm font-bold lg:hidden ${
-              next ? "border-t-[3px] border-ink pt-4" : ""
+            className={`flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-sm font-bold lg:hidden ${
+              next ? "border-t-[3px] border-ink pt-3.5" : ""
             }`}
           >
             <p aria-live="polite">{meta}</p>
