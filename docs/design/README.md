@@ -20,7 +20,7 @@ The desktop boards for the other states are [desktop-closed.png](screens/desktop
 | `docs/design/Desktop{Closed,Full,Empty}.dc.html` | Desktop board for each state (1280 × 800) |
 | `docs/design/DisconnectedMobile.dc.html`, `docs/design/DesktopDisconnected.dc.html` | Sensor-disconnected screen, mobile and desktop |
 | `docs/design/canvas.json` | Canvas layout metadata |
-| `docs/design/screens/*.png` | Renders of the boards above |
+| `docs/design/screens/*.png` | Renders of the boards above. They predate the removal of the REFRESH button (31 Oct 2026), so they still show it; the `.dc.html` sources are current |
 | `public/icons/*.svg` | Icon assets, served at `/icons/...` |
 
 The `.dc.html` files come from the design canvas. They are plain HTML with inline styles, so you can read exact measurements from them. They reference a `support.js` canvas runtime that isn't included and isn't needed.
@@ -39,7 +39,6 @@ These are also defined as Tailwind theme colours in `app/globals.css`, for examp
 | `butter` | `#FFE9A3` | Accent: icon fills and circles |
 | `lavender` | `#C9B8F5` | Accent: icon circles |
 | `offline` | `#D9CCF7` | Light lavender: the sensor-disconnected card |
-| `button` | `#FFFFFF` | Button fill |
 
 A stale reading uses the `offline` colour. `UNKNOWN` ("Unclear reading") has no design yet.
 
@@ -47,7 +46,7 @@ A stale reading uses the `offline` colour. `UNKNOWN` ("Unclear reading") has no 
 
 Both fonts are free on Google Fonts. Load them with `next/font/google`.
 
-- **Anton**: the logo ("PART TIME KILN WATCHER"), the status word and the button labels.
+- **Anton**: the logo ("PART TIME KILN WATCHER"), and the status word.
 - **DM Sans**, weights 500 and 700: body text and labels.
 
 | Element | Mobile | Desktop |
@@ -56,13 +55,11 @@ Both fonts are free on Google Fonts. Load them with `next/font/google`.
 | Copy line | DM Sans 700, 21px, line-height 1.3 | DM Sans 700, 26px |
 | Logo | Anton 20px, letter-spacing 0.04em | Anton 30px |
 | "Checked …" | DM Sans 700, 14px | DM Sans 700, 15px |
-| Button | Anton 18px, letter-spacing 0.06em | Anton 18px |
 
 ## Shapes
 
 - **Card**: a 4px ink border, a state-colour fill and a hard offset shadow with no blur. On mobile the card has a 28px radius, a `10px 10px 0` shadow and 26px padding. On desktop it has a 36px radius, a `14px 14px 0` shadow and 48px padding, inside a page that is at most 1160px wide. The copy is at most 480px wide.
-- **Button**: a 3px ink border, a 12px radius, a white fill, a `5px 5px 0` ink shadow, and at least 48px of height.
-- **Layout**: on mobile the logo sits above the icon, then the status word and copy, with "Checked …" and REFRESH pinned to the bottom. On desktop the logo, "Checked …" and REFRESH form a header row above one wide card, with the icon on the left and the text on the right.
+- **Layout**: on mobile the logo sits above the icon, then the status word and copy, with "Checked …" pinned to the bottom. On desktop the logo and "Checked …" form a header row above one wide card, with the icon on the left and the text on the right.
 
 ## Copy
 
@@ -73,7 +70,7 @@ Both fonts are free on Google Fonts. Load them with `next/font/google`.
 | `OPEN_EMPTY` | EMPTY. | All clear and ready for the next load. Shelve your pieces! |
 | Sensor disconnected (`stale`) | OFFLINE. | Engineering troubleshooting required! |
 
-The disconnected screen adds a small "SENSOR DISCONNECTED" label above the word, and it has no REFRESH button. On mobile, "Last reading [TIME]" replaces the "Checked …" line at the bottom. On desktop it sits alone at the right of the header row.
+The disconnected screen adds a small "SENSOR DISCONNECTED" label above the word. On mobile, "Last reading [TIME]" replaces the "Checked …" line at the bottom. On desktop it sits alone at the right of the header row.
 
 ## Icons
 

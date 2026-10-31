@@ -6,9 +6,9 @@ Kiln Watcher is a single Next.js app that serves both the API and the frontend f
 
 The frontend is the Next.js App Router UI in `app/`. There is no separate frontend project.
 
-- `app/page.tsx` is the single page. It wraps `LiveStatus` in `<Suspense>`, as Cache Components requires for request-time data. `LiveStatus` reads the status through `lib/server` on the server, so the first paint already shows the right card without a client fetch. If storage is down, it renders OFFLINE with "Couldn't refresh" and a REFRESH button.
+- `app/page.tsx` is the single page. It wraps `LiveStatus` in `<Suspense>`, as Cache Components requires for request-time data. `LiveStatus` reads the status through `lib/server` on the server, so the first paint already shows the right card without a client fetch. If storage is down, it renders OFFLINE with "Couldn't refresh".
 - `app/_components/` holds the React components. The leading underscore makes it a private folder that Next.js never turns into a route.
-- `StatusView` is the only client component. It re-fetches `/api/status` when REFRESH is pressed, every 5 minutes while the tab is visible, and when the tab becomes visible again. A failed refresh keeps the last status and shows "Couldn't refresh".
+- `StatusView` is the only client component. It re-fetches `/api/status` every 5 minutes while the tab is visible, and when the tab becomes visible again. There is no refresh button: readings only arrive every few hours, and the design dropped it. A failed refresh keeps the last status and shows "Couldn't refresh".
 - `app/globals.css` holds the Tailwind setup and colour tokens. `app/layout.tsx` loads the fonts.
 
 The API routes sit beside it in `app/api/`.
@@ -22,7 +22,7 @@ app/
   page.tsx                   Suspense boundary around <LiveStatus>
   _components/
     LiveStatus.tsx           server: reads the status at request time (falls back to a retry state)
-    StatusView.tsx           client: REFRESH, polling every 5 min while visible, refresh on tab return
+    StatusView.tsx           client: polling every 5 min while visible, refresh on tab return
     StatusCard.tsx           presentational: the card for a display state, mobile and desktop (props only)
     KilnIcon.tsx             inline SVG per display state (inline so multiply blend works)
   api/

@@ -11,8 +11,6 @@ const CARD_COLOUR: Record<DisplayState, string> = {
 
 export interface StatusCardProps {
   status: Status;
-  onRefresh: () => void;
-  refreshing: boolean;
   /** The last refresh (or the initial load) failed. */
   failed: boolean;
 }
@@ -23,26 +21,10 @@ function metaText({ status, failed }: Pick<StatusCardProps, "status" | "failed">
   return `${status.offline ? "Last reading" : "Checked"} ${formatAge(status.ageSeconds)}`;
 }
 
-function RefreshButton({ onRefresh, refreshing }: Pick<StatusCardProps, "onRefresh" | "refreshing">) {
-  return (
-    <button
-      type="button"
-      onClick={onRefresh}
-      disabled={refreshing}
-      aria-busy={refreshing}
-      className="min-h-12 cursor-pointer rounded-xl border-[3px] border-ink bg-button px-5 font-display text-lg tracking-[0.06em] shadow-[5px_5px_0_var(--color-ink)] transition-[translate,box-shadow] focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-ink active:translate-x-[3px] active:translate-y-[3px] active:shadow-[2px_2px_0_var(--color-ink)] disabled:cursor-wait disabled:opacity-70 lg:px-[22px]"
-    >
-      {refreshing ? "CHECKING…" : "REFRESH"}
-    </button>
-  );
-}
-
 /** The Pastel Riso status card: one layout below `lg`, the wide desktop layout above it. */
 export function StatusCard(props: StatusCardProps) {
   const { status } = props;
   const meta = metaText(props);
-  // The offline design has no REFRESH button; it comes back if a refresh failed so people can retry.
-  const showButton = !status.offline || props.failed;
   const offline = status.state === "OFFLINE";
 
   return (
@@ -50,10 +32,7 @@ export function StatusCard(props: StatusCardProps) {
       <div className="mx-auto flex max-w-[420px] flex-col gap-8 lg:max-w-[1160px]">
         <header className="hidden flex-wrap items-center justify-between gap-4 lg:flex">
           <p className="font-display text-[30px] tracking-[0.04em]">PART TIME KILN WATCHER</p>
-          <div className="flex items-center gap-4">
-            <p className="text-[15px] font-bold" aria-live="polite">{meta}</p>
-            {showButton && <RefreshButton {...props} />}
-          </div>
+          <p className="text-[15px] font-bold" aria-live="polite">{meta}</p>
         </header>
 
         <main
@@ -87,10 +66,7 @@ export function StatusCard(props: StatusCardProps) {
 
           <div className="grow lg:hidden" />
 
-          <div className="flex items-center justify-between gap-3 lg:hidden">
-            <p className="text-sm font-bold" aria-live="polite">{meta}</p>
-            {showButton && <RefreshButton {...props} />}
-          </div>
+          <p className="text-sm font-bold lg:hidden" aria-live="polite">{meta}</p>
         </main>
       </div>
     </div>

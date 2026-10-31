@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { NO_READING_STATUS, toStatus } from "@/lib/domain/status";
 import type { KilnState, Status } from "@/lib/domain/types";
 import { makeReading, testConfig } from "@/test/builders";
@@ -12,9 +11,7 @@ const statusFor = (state: KilnState, ageSeconds = 7200): Status =>
   toStatus(makeReading({ state, measuredAt: new Date(NOW.getTime() - ageSeconds * 1000).toISOString() }), NOW, testConfig);
 
 function renderCard(props: Partial<StatusCardProps> = {}) {
-  const onRefresh = vi.fn();
-  render(<StatusCard status={statusFor("OPEN_FULL")} onRefresh={onRefresh} refreshing={false} failed={false} {...props} />);
-  return { onRefresh };
+  render(<StatusCard status={statusFor("OPEN_FULL")} failed={false} {...props} />);
 }
 
 const card = () => document.querySelector("main")!;
@@ -35,14 +32,14 @@ describe("StatusCard", () => {
     expect(screen.queryByText("SENSOR DISCONNECTED")).not.toBeInTheDocument();
   });
 
-  test("shows how long ago the kiln was checked, with a REFRESH button", () => {
+  test("shows how long ago the kiln was checked, and no buttons", () => {
     renderCard({ status: statusFor("CLOSED", 7200) });
     // Rendered twice: in the desktop header and the mobile footer; CSS shows one.
     expect(screen.getAllByText("Checked 2 h ago")).toHaveLength(2);
-    expect(screen.getAllByRole("button", { name: "REFRESH" })).toHaveLength(2);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
-  test("OFFLINE uses the disconnected design with the last reading's age and no REFRESH", () => {
+  test("OFFLINE uses the disconnected design with the last reading's age", () => {
     renderCard({ status: statusFor("OPEN_FULL", 50 * 3600) });
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("OFFLINE.");
     expect(screen.getByText("Engineering troubleshooting required!")).toBeInTheDocument();
@@ -59,23 +56,8 @@ describe("StatusCard", () => {
     expect(screen.getAllByText("No readings yet")).toHaveLength(2);
   });
 
-  test("after a failed refresh it says so and offers REFRESH, even when offline", () => {
+  test("after a failed refresh it says so", () => {
     renderCard({ status: NO_READING_STATUS, failed: true });
     expect(screen.getAllByText("Couldn't refresh")).toHaveLength(2);
-    expect(screen.getAllByRole("button", { name: "REFRESH" })).toHaveLength(2);
-  });
-
-  test("calls onRefresh when REFRESH is pressed", async () => {
-    const { onRefresh } = renderCard();
-    await userEvent.click(screen.getAllByRole("button", { name: "REFRESH" })[0]);
-    expect(onRefresh).toHaveBeenCalledOnce();
-  });
-
-  test("disables the button while refreshing", () => {
-    renderCard({ refreshing: true });
-    for (const button of screen.getAllByRole("button", { name: "CHECKING…" })) {
-      expect(button).toBeDisabled();
-      expect(button).toHaveAttribute("aria-busy", "true");
-    }
   });
 });

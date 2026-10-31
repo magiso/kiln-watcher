@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 import { act, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { toStatus } from "@/lib/domain/status";
 import type { Status } from "@/lib/domain/types";
@@ -20,6 +19,12 @@ function setVisibility(state: DocumentVisibilityState) {
   document.dispatchEvent(new Event("visibilitychange"));
 }
 
+// Leave the tab and come back, which triggers a refresh.
+async function returnToTab() {
+  act(() => setVisibility("hidden"));
+  await act(async () => setVisibility("visible"));
+}
+
 beforeEach(() => {
   vi.stubGlobal("fetch", fetchMock);
   setVisibility("visible");
@@ -37,10 +42,10 @@ describe("StatusView", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  test("REFRESH fetches /api/status and shows the new state", async () => {
+  test("a refresh fetches /api/status and shows the new state", async () => {
     fetchMock.mockReturnValueOnce(ok(empty));
     render(<StatusView initial={full} />);
-    await userEvent.click(screen.getAllByRole("button", { name: "REFRESH" })[0]);
+    await returnToTab();
     expect(fetchMock).toHaveBeenCalledWith("/api/status", { cache: "no-store" });
     expect(headline()).toHaveTextContent("EMPTY.");
     expect(screen.getAllByText("Checked just now")).toHaveLength(2);
@@ -52,7 +57,7 @@ describe("StatusView", () => {
   ])("keeps the last status and says so after %s", async (_, response) => {
     fetchMock.mockImplementationOnce(response);
     render(<StatusView initial={full} />);
-    await userEvent.click(screen.getAllByRole("button", { name: "REFRESH" })[0]);
+    await returnToTab();
     expect(headline()).toHaveTextContent("FULL.");
     expect(screen.getAllByText("Couldn't refresh")).toHaveLength(2);
   });
@@ -60,17 +65,16 @@ describe("StatusView", () => {
   test("a successful refresh clears the failure", async () => {
     fetchMock.mockRejectedValueOnce(new TypeError("offline")).mockReturnValueOnce(ok(full));
     render(<StatusView initial={full} />);
-    const [button] = screen.getAllByRole("button", { name: "REFRESH" });
-    await userEvent.click(button);
-    await userEvent.click(button);
+    await returnToTab();
+    expect(screen.getAllByText("Couldn't refresh")).toHaveLength(2);
+    await returnToTab();
     expect(screen.queryByText("Couldn't refresh")).not.toBeInTheDocument();
   });
 
-  test("shows OFFLINE with a retry when the initial load failed", () => {
+  test("shows OFFLINE when the initial load failed", () => {
     render(<StatusView initial={null} />);
     expect(headline()).toHaveTextContent("OFFLINE.");
     expect(screen.getAllByText("Couldn't refresh")).toHaveLength(2);
-    expect(screen.getAllByRole("button", { name: "REFRESH" })).toHaveLength(2);
   });
 
   test("refreshes every few minutes while the tab is visible, and not while hidden", async () => {

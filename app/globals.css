@@ -10,7 +10,6 @@
   --color-butter: #ffe9a3; /* accent */
   --color-lavender: #c9b8f5; /* accent */
   --color-offline: #d9ccf7; /* sensor disconnected (stale) */
-  --color-button: #ffffff; /* button fill */
 }
 
 /* Fonts are loaded by next/font in app/layout.tsx. */
